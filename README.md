@@ -1,10 +1,15 @@
 ## Libraries
 
 [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/index)
+
 [DeepSpeed](https://github.com/microsoft/DeepSpeed)
+
 [BitsAndBytes](https://github.com/TimDettmers/bitsandbytes)
+
 [PEFT](https://github.com/huggingface/peft)
+
 [GitHub: Qlora](https://github.com/artidoro/qlora)
+
 [SpQR paper implementation](https://github.com/Vahe1994/SpQR)
 
 
