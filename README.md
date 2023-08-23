@@ -10,6 +10,8 @@
 
 [GitHub: Qlora](https://github.com/artidoro/qlora)
 
+[FastChat](https://github.com/lm-sys/FastChat)
+
 [SpQR paper implementation](https://github.com/Vahe1994/SpQR)
 
 [Llama Recipes](https://github.com/facebookresearch/llama-recipes)
