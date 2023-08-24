@@ -69,4 +69,13 @@ RUN python -c "import vllm; assert vllm"
 # non-root user
 USER feyntune
 
-CMD ["poetry", "run", "poe", "jl"]
+# for testing
+ENV INFERENCE_SERVER_MODEL=bigscience/bloomz-560m \
+  INFERENCE_SERVER_PORT=6969 \
+  INFERENCE_SERVER_HOST=0.0.0.0
+EXPOSE $INFERENCE_SERVER_PORT
+
+CMD ["python", "-m", "vllm.entrypoints.openai.api_server", \
+  "--host", $INFERENCE_SERVER_HOST, \
+  "--port", $INFERENCE_SERVER_PORT, \
+  "--model", $INFERENCE_SERVER_MODEL]

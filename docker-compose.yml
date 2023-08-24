@@ -10,6 +10,8 @@ x-common-service: &common-service
   ports:
     # Jupyter
     - 8888:8888
+    # model inference server
+    - 6969:6969
     # Tensorboard
     - 8686:8686
     - 6006:6006
@@ -21,7 +23,9 @@ x-common-service: &common-service
     - TESTING=0
     - LOCAL_DEV=1
     - MLFLOW_TRACKING_URI=http://0.0.0.0:5000
-  command:  bash -c "nohup poetry run poe jl & tail -f /dev/null"
+    - INFERENCE_SERVER_HOST=0.0.0.0
+    - MODEL=bigscience/bloomz-560m
+  command: /bin/sh -c "python -m vllm.entrypoints.openai.api_server --host $INFERENCE_SERVER_HOST --port 6969 --model $MODEL"
 
 services:
   gpu:
