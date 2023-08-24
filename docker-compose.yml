@@ -1,0 +1,38 @@
+version: '3.8'
+
+x-common-service: &common-service
+  build: 
+    context: .
+    dockerfile: ./dockerfiles/Dockerfile
+  volumes:
+    - .:/home/feyntune
+  ports:
+    # Jupyter
+    - 8888:8888
+    # Tensorboard
+    - 8686:8686
+    - 6006:6006
+    # MLFlow
+    - 5000:5000
+  expose:
+    - 5000
+  environment:
+    - TESTING=0
+    - LOCAL_DEV=1
+    - MLFLOW_TRACKING_URI=http://0.0.0.0:5000
+  command:  bash -c "nohup poetry run poe jl & tail -f /dev/null"
+
+services:
+  gpu:
+    <<: *common-service
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    container_name: feyntune_gpu_container
+  cpu: 
+    <<: *common-service
+    container_name: feyntune_cpu_container

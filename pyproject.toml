@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "argos"
+version = "0.1.0"
+description = ""
+authors = ["ARGOS team"]
+readme = "README.md"
+
+[tool.poetry.group.dev.dependencies]
+maturin = "^1.1.0"
+
+[tool.poe.tasks]
+track = "mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0"                                
+jl = "jupyter lab --no-browser --allow-root --ip 0.0.0.0 --port 8888"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+mdtex2html = "*"
+socksio = "*"
+tqdm = "^4.65.0"
+colorama = "*"
+markdown = "*"
+markdown2 = "*"
+poethepoet = "^0.20.0"
+python-dotenv = "^1.0.0"
+aioitertools = "^0.11.0"
+setuptools = "^68.0.0"
+toml = "^0.10.2"
+rich = "^13.4.2"
+gin-config = "^0.5.0"
+
+[tool.poetry.dev-dependencies]
+jupyter="*"
+jupyterlab="^4.0"
+jupyterlab_server="^2.24"
+pytest="*"
+pylint="*"
+
+[build-system]
+requires = ["maturin>=1.1,<2.0"]
+build-backend = "maturin"

@@ -1,0 +1,10 @@
+{
+    "name": "FeynTune",
+    "build" : {
+        "dockerfile" : "Dockerfile"
+    },
+    "extensions" : [
+        "ms-vscode-remote.remote-containers",
+        "ms-python.vscode-pylance"
+    ]
+}

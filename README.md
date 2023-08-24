@@ -1,3 +1,36 @@
+## Installation
+
+A ready-made environment is provided with Docker. So, on Linux or WSL(v2), make sure you have installed [Docker](https://docs.docker.com/engine/install/) with [Docker Compose](https://docs.docker.com/compose/install/).
+
+Commands for installation and environment management have been set up in the [Makefile](./Makefile). 
+
+Install environment (GPU support included):
+
+```sh
+make install
+```
+
+### Launch container and start jupyter lab running in environment
+
+To launch (and start a notebook server in the background) you can run (CPU only):
+
+```sh
+make up
+```
+
+Or:
+
+```sh
+make up-gpu
+```
+
+Once it's launched, retrieve the notebook link by running `make logs` (can take a few seconds to appear in the container log).
+
+### Development
+
+A [.devcontainer](./.devcontainer) is provided, which should allow you to properly develop with full IDE support form inside the container in VSCode. You can enable this by installing VSCode Remote Containers extension and choosing "open project in container".
+
+
 ## Libraries
 
 [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/index)
@@ -8,7 +41,7 @@
 
 [PEFT](https://github.com/huggingface/peft)
 
-[GitHub: Qlora](https://github.com/artidoro/qlora)
+[GitHub: QLoRA](https://github.com/artidoro/qlora)
 
 [FastChat](https://github.com/lm-sys/FastChat)
 
@@ -16,7 +49,7 @@
 
 [Llama Recipes](https://github.com/facebookresearch/llama-recipes)
 
-[GGML (quantization and inference, CPU-focused)](https://github.com/ggerganov/ggml)
+[GGML (post-training quantization and inference, CPU-focused)](https://github.com/ggerganov/ggml)
 
 [GPTQ (post-training quantization, GPU)](https://github.com/ist-daslab/gptq)
 
