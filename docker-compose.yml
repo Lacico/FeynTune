@@ -4,6 +4,7 @@ x-common-service: &common-service
   build: 
     context: .
     dockerfile: ./dockerfiles/Dockerfile
+  shm_size: "8gb"
   volumes:
     - .:/home/feyntune
   ports:

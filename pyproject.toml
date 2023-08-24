@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "argos"
+name = "FeynTune"
 version = "0.1.0"
 description = ""
-authors = ["ARGOS team"]
+authors = ["Lacico", "SlapDrone <slapdrone@proton.me"]
 readme = "README.md"
 
 [tool.poetry.group.dev.dependencies]
@@ -34,6 +34,26 @@ jupyterlab="^4.0"
 jupyterlab_server="^2.24"
 pytest="*"
 pylint="*"
+mypy = "*"
+black = "*"
+ruff = "*"
+
+[tool.mypy]
+ignore_missing_imports = "True"
+disallow_untyped_defs = "True"
+exclude = ["notebooks", "build", "examples"]
+
+[tool.ruff]
+ignore = ["E501"]
+exclude = [
+    ".venv",
+    "__pycache__",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".ruff_cache",
+    "examples",
+    "notebooks",
+]
 
 [build-system]
 requires = ["maturin>=1.1,<2.0"]

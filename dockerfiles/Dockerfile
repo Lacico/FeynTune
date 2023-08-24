@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+FROM nvcr.io/nvidia/pytorch:22.12-py3
 
 # configure docker environment
 ENV YOUR_ENV="dev" \
@@ -55,13 +55,18 @@ COPY pyproject.toml poetry.lock* ./
 COPY feyntune* README.md ./
 
 # install python dependencies
+#RUN pip uninstall torch -y 
 RUN poetry install \
   $(test "$YOUR_ENV" == production && echo "--no-dev") --no-interaction --no-ansi
 
-# non-root user
-USER feyntune
-
 # move remaining local code over
 COPY --chown=feyntune:feyntune . .
+
+# build vllm from source
+RUN cd vllm && pip install -e . && cd ..
+RUN python -c "import vllm; assert vllm"
+
+# non-root user
+USER feyntune
 
 CMD ["poetry", "run", "poe", "jl"]
