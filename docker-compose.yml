@@ -23,9 +23,7 @@ x-common-service: &common-service
     - TESTING=0
     - LOCAL_DEV=1
     - MLFLOW_TRACKING_URI=http://0.0.0.0:5000
-    - INFERENCE_SERVER_HOST=0.0.0.0
-    - MODEL=bigscience/bloomz-560m
-  command: /bin/sh -c "python -m vllm.entrypoints.openai.api_server --host $INFERENCE_SERVER_HOST --port 6969 --model $MODEL"
+  command: /bin/sh -c "python -m vllm.entrypoints.openai.api_server --host 0.0.0.0 --port 6969 --model bigscience/bloomz-560m"
 
 services:
   gpu:
