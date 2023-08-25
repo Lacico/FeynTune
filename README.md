@@ -85,5 +85,7 @@ A [.devcontainer](./.devcontainer) is provided, which should allow you to proper
 
 [SpQR - Sparse-Quantized Representation (to be integrated in BitsAndBytes)](https://arxiv.org/pdf/2306.03078.pdf)
 
+## Running Code
 
+You will need to export an environment variable: `HUGGINGFACE_KEY=<your_key>` and then you can use the build, run and lint commands defined in the makefile e.g. `make build`. The docker container uses multiple stages to cache models from huggingface such that they aren't downloaded for every code change. To add more models to the cache simply add a line to the `ModelPaths` class in the [model_paths.py](./src/model_paths.py) module.
 
