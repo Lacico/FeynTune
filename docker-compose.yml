@@ -23,9 +23,10 @@ x-common-service: &common-service
     - TESTING=0
     - LOCAL_DEV=1
     - MLFLOW_TRACKING_URI=http://0.0.0.0:5000
-  command: /bin/sh -c "nohup poetry run poe jl & \
-    python -m vllm.entrypoints.openai.api_server --host 0.0.0.0 --port 6969 --model bigscience/bloomz-560m & \
-    tail -f /dev/null"
+  command: poetry run poe jl
+  #/bin/sh -c "nohup poetry run poe jl & \
+    #python -m vllm.entrypoints.openai.api_server --host 0.0.0.0 --port 6969 --model bigscience/bloomz-560m & \
+    #tail -f /dev/null"
 
 services:
   gpu:
