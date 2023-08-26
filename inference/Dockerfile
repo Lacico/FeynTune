@@ -17,7 +17,7 @@ ENV YOUR_ENV="dev" \
   PIP_DEFAULT_TIMEOUT=100 \
   DEBIAN_FRONTEND=noninteractive \ 
   PYTHON_VERSION=3.10.8 \
-  WORKDIR=/home/feyntune
+  WORKDIR=/home/feyntune-inference
 
 # install system dependencies (incl build python)
 RUN apt update \
@@ -28,8 +28,8 @@ RUN apt update \
   && apt clean
 
 # create user with normal privileges
-RUN mkdir -p $WORKDIR && addgroup feyntune && useradd -d $WORKDIR -g feyntune feyntune \
-  && chown feyntune:feyntune $WORKDIR
+RUN mkdir -p $WORKDIR && addgroup feyntune-inference && useradd -d $WORKDIR -g feyntune-inference feyntune-inference \
+  && chown feyntune-inference:feyntune-inference $WORKDIR
 
 # set working directory
 WORKDIR $WORKDIR
@@ -52,7 +52,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 # cache python requirements in docker layer
 COPY pyproject.toml poetry.lock* ./
 # cache project source code (required to be installed by poetry)
-COPY feyntune* README.md ./
+COPY feyntune-inference* README.md ./
 
 # install python dependencies
 #RUN pip uninstall torch -y 
@@ -60,14 +60,14 @@ RUN poetry install \
   $(test "$YOUR_ENV" == production && echo "--no-dev") --no-interaction --no-ansi
 
 # move remaining local code over
-COPY --chown=feyntune:feyntune . .
+COPY --chown=feyntune-inference:feyntune-inference . .
 
 # build vllm from source
 RUN cd vllm && pip install -e . && cd ..
 RUN python -c "import vllm; assert vllm"
 
 # non-root user
-USER feyntune
+USER feyntune-inference
 
 # for testing
 ENV INFERENCE_SERVER_MODEL=bigscience/bloomz-560m \

@@ -1,3 +1,3 @@
 [submodule "vllm"]
-	path = vllm
+	path = inference/vllm
 	url = https://github.com/vllm-project/vllm.git
