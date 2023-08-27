@@ -1,6 +1,5 @@
 # syntax = docker/dockerfile:1
-# 3.10.11
-FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-devel as cache
+FROM feyntune-base as cache
 ARG HUGGINGFACE_KEY
 ENV HUGGINGFACE_KEY=$HUGGINGFACE_KEY
 COPY cache_requirements.txt requirements.txt

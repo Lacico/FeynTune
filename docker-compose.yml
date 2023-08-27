@@ -1,5 +1,6 @@
 version: '3.8'
 
+# common services for inference on CPU and GPU
 x-inference-common-service: &inference-common-service
   build: 
     context: .
@@ -16,20 +17,20 @@ x-inference-common-service: &inference-common-service
     - TESTING=0
     - LOCAL_DEV=1
   command: poetry run poe jl
-  #/bin/sh -c "nohup poetry run poe jl & \
-    #python -m vllm.entrypoints.openai.api_server --host 0.0.0.0 --port 6969 --model bigscience/bloomz-560m & \
-    #tail -f /dev/null"
 
-
+# common services for training on CPU and GPU
 x-train-common-service: &train-common-service
   build:
     context: . 
     dockerfile: ./train/Dockerfile
+    target: runner
+    args:
+      HUGGINGFACE_KEY: ${HUGGINGFACE_KEY}
   shm_size: "8gb"
-  args:
-    HUGGINGFACE_KEY: ${HUGGINGFACE_KEY}
   volumes:
-    - ./inference:/home/feyntune-inference
+    - ./train:/home/feyntune-train
+  environment:
+    HUGGINGFACE_KEY: ${HUGGINGFACE_KEY}
   ports:
     # Jupyter
     - 8889:8888
@@ -47,10 +48,12 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    image: feyntune-inference-gpu
     container_name: feyntune-inference-gpu-container
   # CPU-only
   inference-cpu: 
     <<: *inference-common-service
+    image: feyntune-inference-cpu
     container_name: feyntune-inference-cpu-container
   # -- Finetuning scripts
   # GPU
@@ -64,7 +67,9 @@ services:
               count: 1
               capabilities: [gpu]
     container_name: feyntune-train-gpu-container
+    image: feyntune-train-gpu
   # CPU-only
   train-cpu:
     <<: *train-common-service
+    image: feyntune-train-cpu
     container_name: feyntune-train-cpu-container
