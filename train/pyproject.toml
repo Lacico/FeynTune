@@ -1,12 +1,9 @@
 [tool.poetry]
-name = "FeynTune"
+name = "feyntune"
 version = "0.1.0"
 description = ""
 authors = ["Lacico <lacicocodes@gmail.com>", "SlapDrone <slapdrone@proton.me"]
 readme = "README.md"
-
-[tool.poetry.group.dev.dependencies]
-maturin = "^1.1.0"
 
 [tool.poe.tasks]
 track = "mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0"                                
@@ -18,16 +15,22 @@ poethepoet = "^0.20.0"
 python-dotenv = "^1.0.0"
 rich = "^13.4.2"
 gin-config = "^0.5.0"
-transformers = {version = "*", extras = ["torch"]}
+datasets = "*"
+
+[tool.poetry.dependencies.transformers]
+version = "*"
+extras = [ "torch",]
+
+[tool.poetry.group.finetune.dependencies]
 bitsandbytes = "*"
 accelerate = "*"
 scipy = "*"
 peft = "*"
 safetensors = "*"
-datasets = "*"
 trl = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
+maturin = "^1.1.0"
 jupyter="*"
 jupyterlab="^4.0"
 jupyterlab_server="^2.24"

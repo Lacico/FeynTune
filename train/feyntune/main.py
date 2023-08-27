@@ -86,7 +86,9 @@ def print_number_of_trainable_model_parameters(model):
         all_model_params += param.numel()
         if param.requires_grad:
             trainable_model_params += param.numel()
-    print(f"trainable model parameters: {trainable_model_params}. All model parameters: {all_model_params} ")
+    print(
+        f"trainable model parameters: {trainable_model_params}. All model parameters: {all_model_params} "
+    )
     return trainable_model_params
 
 
@@ -99,7 +101,9 @@ def main(token: str):
     model = get_peft_model(model, get_peft_config(model))
 
     peft_p = print_number_of_trainable_model_parameters(model)
-    print(f"# Trainable Parameter \nBefore: {ori_p} \nAfter: {peft_p} \nPercentage: {round(peft_p / ori_p * 100, 2)}")
+    print(
+        f"# Trainable Parameter \nBefore: {ori_p} \nAfter: {peft_p} \nPercentage: {round(peft_p / ori_p * 100, 2)}"
+    )
     output_dir = "/results"
     train(model, tokenizer, dataset, output_dir)
 

@@ -3,27 +3,26 @@ version: '3.8'
 # common services for inference on CPU and GPU
 x-inference-common-service: &inference-common-service
   build: 
-    context: .
-    dockerfile: ./inference/Dockerfile
+    context: inference
+    dockerfile: Dockerfile
   shm_size: "8gb"
-  volumes:
-    - ./inference:/home/feyntune-inference
+  #volumes:
+  #  - ./inference:/home/feyntune-inference
   ports:
     # Jupyter
     - 8888:8888
     # vllm inference server
     - 6969:6969
-  environment:
-    - TESTING=0
-    - LOCAL_DEV=1
+  env_file:
+    - .env
   command: poetry run poe jl
 
 # common services for training on CPU and GPU
 x-train-common-service: &train-common-service
   build:
-    context: . 
-    dockerfile: ./train/Dockerfile
-    target: runner
+    context: train 
+    dockerfile: Dockerfile
+    target: finetuner
     args:
       HUGGINGFACE_KEY: ${HUGGINGFACE_KEY}
   shm_size: "8gb"
@@ -34,6 +33,8 @@ x-train-common-service: &train-common-service
   ports:
     # Jupyter
     - 8889:8888
+  env_file:
+    - .env
   command: poetry run poe jl
 
 services:

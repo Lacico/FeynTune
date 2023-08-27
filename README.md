@@ -53,6 +53,8 @@ A [.devcontainer](./.devcontainer) is provided, which should allow you to proper
 
 [GPTQ (post-training quantization, GPU)](https://github.com/ist-daslab/gptq)
 
+[Fine Tuning Language Models with Just Forward Passes (code)](https://github.com/princeton-nlp/mezo)
+
 ## Videos
 
 [Understanding 4bit Quantization: QLoRA explained (w/ Colab)](https://www.youtube.com/watch?v=TPcXVJ1VSRI)
@@ -84,6 +86,8 @@ A [.devcontainer](./.devcontainer) is provided, which should allow you to proper
 [QLoRA paper](https://arxiv.org/abs/2305.14314)
 
 [SpQR - Sparse-Quantized Representation (to be integrated in BitsAndBytes)](https://arxiv.org/pdf/2306.03078.pdf)
+
+[Fine Tuning Language Models with Just Forward Passes](https://arxiv.org/abs/2305.17333)
 
 ## Running Code
 
