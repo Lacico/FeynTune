@@ -1,6 +1,6 @@
 version: '3.8'
 
-x-common-service: &inference-common-service
+x-inference-common-service: &inference-common-service
   build: 
     context: .
     dockerfile: ./inference/Dockerfile
@@ -20,7 +20,24 @@ x-common-service: &inference-common-service
     #python -m vllm.entrypoints.openai.api_server --host 0.0.0.0 --port 6969 --model bigscience/bloomz-560m & \
     #tail -f /dev/null"
 
+
+x-train-common-service: &train-common-service
+  build:
+    context: . 
+    dockerfile: ./train/Dockerfile
+  shm_size: "8gb"
+  args:
+    HUGGINGFACE_KEY: ${HUGGINGFACE_KEY}
+  volumes:
+    - ./inference:/home/feyntune-inference
+  ports:
+    # Jupyter
+    - 8889:8888
+  command: poetry run poe jl
+
 services:
+  # -- Inference server
+  # GPU
   inference-gpu:
     <<: *inference-common-service
     deploy:
@@ -31,6 +48,23 @@ services:
               count: 1
               capabilities: [gpu]
     container_name: feyntune-inference-gpu-container
+  # CPU-only
   inference-cpu: 
     <<: *inference-common-service
     container_name: feyntune-inference-cpu-container
+  # -- Finetuning scripts
+  # GPU
+  train-gpu:
+    <<: *train-common-service
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    container_name: feyntune-train-gpu-container
+  # CPU-only
+  train-cpu:
+    <<: *train-common-service
+    container_name: feyntune-train-cpu-container
