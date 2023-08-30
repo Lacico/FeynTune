@@ -14,6 +14,7 @@ from datasets import load_dataset
 from pathlib import Path
 from functools import partial
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 cutoff_len = 512
 batch_size = 1
@@ -46,6 +47,16 @@ You must output the SQL query that answers the question.
 {output}"""
 
 
+def tokenize_(prompt, tokenizer, add_eos_token=True):
+    result = tokenizer(
+        prompt,
+        return_tensors="pt",
+        truncation=False,
+        max_length=cutoff_len,
+    )
+    return result
+
+
 def tokenize(prompt, tokenizer, add_eos_token=True):
     # there's probably a way to do this with the tokenizer settings
     # but again, gotta move fast
@@ -75,17 +86,10 @@ def generate_and_tokenize_prompt(data_point, tokenizer):
         data_point["context"],
         data_point["output"],
     )
+    input_prompt = generate_prompt_sql(data_point["input"], data_point["context"], "")
     tokenized_full_prompt = tokenize(full_prompt, tokenizer)
+    # tokenized_input_prompt = tokenize(input_prompt, tokenizer)
     return tokenized_full_prompt
-
-
-def get_tokenizer(token: str):
-    tokenizer = AutoTokenizer.from_pretrained(
-        ModelPaths.LLAMA_2_7B, add_eos_token=True, token=token
-    )
-    tokenizer.pad_token = 0
-    tokenizer.padding_side = "left"
-    return tokenizer
 
 
 def create_peft_config():
@@ -179,7 +183,32 @@ def get_output_path():
 
 def main(token: str):
     model = get_model(ModelPaths.LLAMA_2_7B, token=token)
-    tokenizer = get_tokenizer(token=token)
+    tokenizer = AutoTokenizer.from_pretrained(
+        ModelPaths.LLAMA_2_7B, add_eos_token=True, token=token
+    )
+
+    # Add new padding token to the tokenizes method
+    # special_tokens_dict = {'pad_token': '<PAD>'}
+    # tokenizer.add_special_tokens(special_tokens_dict)
+
+    # Adjust the padding token ID in the tokenizer to reflect the new token
+    # tokenizer.pad_token = '<PAD>'
+    # tokenizer.pad_token_id = tokenizer.convert_tokens_to_ids('<PAD>')
+
+    # Resize the model's token embeddings
+    # model.resize_token_embeddings(len(tokenizer))
+
+    # Initialize the padding token's embedding to zeros
+    # padding_embedding = model.get_input_embeddings()
+    # new_embedding = torch.zeros(1, padding_embedding.embedding_dim).to(device)
+    # padding_embedding.weight.data = torch.cat([padding_embedding.weight.data, new_embedding], dim=0).to(device)
+
+    tokenizer.pad_token_id = 0  # unk. we want this to be different from the eos token
+    tokenizer.padding_side = "left"  # Allow batched inference
+    # tokenizer.padding_side = 'right'
+    # tokenizer.truncation_side = 'right'
+    print(tokenizer)
+
     data_path = get_data_path().as_posix()
     data = load_dataset("json", data_files=data_path)
 
