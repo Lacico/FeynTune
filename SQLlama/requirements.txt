@@ -1,8 +1,0 @@
-transformers[torch]
-bitsandbytes
-accelerate
-scipy
-peft
-safetensors
-datasets
-trl

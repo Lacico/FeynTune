@@ -1,0 +1,54 @@
+[build-system]
+requires = [ "maturin>=1.1,<2.0",]
+build-backend = "maturin"
+
+[tool.poetry]
+name = "feyntune"
+version = "0.1.0"
+description = ""
+authors = [ "Lacico <lacicocodes@gmail.com>", "SlapDrone <slapdrone@proton.me",]
+readme = "README.md"
+
+[tool.mypy]
+ignore_missing_imports = "True"
+disallow_untyped_defs = "True"
+exclude = [ "notebooks", "build", "examples",]
+
+[tool.ruff]
+ignore = [ "E501",]
+exclude = [ ".venv", "__pycache__", ".ipynb_checkpoints", ".mypy_cache", ".ruff_cache", "examples", "notebooks",]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+poethepoet = "^0.20.0"
+python-dotenv = "^1.0.0"
+rich = "^13.4.2"
+gin-config = "^0.5.0"
+datasets = "*"
+
+[tool.poe.tasks]
+track = "mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0"
+jl = "jupyter lab --no-browser --allow-root --ip 0.0.0.0 --port 8888"
+
+[tool.poetry.dependencies.transformers]
+version = "*"
+extras = [ "torch",]
+
+[tool.poetry.group.finetune.dependencies]
+bitsandbytes = "*"
+accelerate = "*"
+scipy = "*"
+peft = "*"
+safetensors = "*"
+trl = "*"
+
+[tool.poetry.group.dev.dependencies]
+maturin = "^1.1.0"
+jupyter = "*"
+jupyterlab = "^4.0"
+jupyterlab_server = "^2.24"
+pytest = "*"
+pylint = "*"
+mypy = "*"
+black = "*"
+ruff = "*"

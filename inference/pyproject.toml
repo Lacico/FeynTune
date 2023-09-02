@@ -44,7 +44,14 @@ ruff = "*"
 [tool.mypy]
 ignore_missing_imports = "True"
 disallow_untyped_defs = "True"
-exclude = ["notebooks", "build", "examples"]
+exclude = ["notebooks", "build", "examples", "vllm"]
+
+[tool.black]
+exclude = '''
+(
+  /vllm/
+)
+'''
 
 [tool.ruff]
 ignore = ["E501"]
@@ -56,6 +63,7 @@ exclude = [
     ".ruff_cache",
     "examples",
     "notebooks",
+    "vllm"
 ]
 
 [build-system]
